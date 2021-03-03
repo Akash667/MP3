@@ -2,7 +2,10 @@
   height: 100vh;
   display: grid;
   grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-rows: 40px 1fr;
+
+  grid-template-areas: "upload upload"
+                       "menu bar";
   background-image: linear-gradient(
     135deg,
     #69ff97 10%,
@@ -13,6 +16,9 @@
 }
 
 .menu {
+
+  grid-area: menu;
+
   padding: 10px;
   margin: 1em;
   height: 90%;
@@ -20,12 +26,27 @@
 }
 
 .box{
+
   display: grid;
   grid-template-columns: 1fr ;
-  grid-template-rows: 1fr 5fr;
- 
+  grid-template-rows: 40px 1fr;
+  row-gap: 5px;
+  
+  padding: auto;
 }
 
 .uploadlabel{
+
+  grid-area: upload;
+
   margin: auto;
+  cursor: grab;
+}
+
+.canva{
+  overflow: scroll;
+}
+
+.toolbar{
+  grid-area:bar;
 }

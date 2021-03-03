@@ -26,6 +26,8 @@ function App() {
 
     const uploadBtn = document.getElementById("uploadfile") as HTMLInputElement;
 
+    const menuDiv = document.getElementById("menu") as HTMLDivElement;
+
     uploadBtn.addEventListener("change", (e) => {
       const uploadFile = document.getElementById(
         "uploadfile"
@@ -51,30 +53,70 @@ function App() {
           img.src = reader.result as string;
 
           img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+            let height = canvas!.parentElement!.clientHeight;
+            let width = canvas!.parentElement!.clientWidth;
+
+            let ratio = img.width / img.height;
+
+            if (img.width > img.height) {
+              if (img.width > canvas!.parentElement!.clientWidth) {
+                width = canvas!.parentElement!.clientWidth - 10;
+                height = width / ratio;
+              }
+            } else if (img.height > canvas!.parentElement!.clientHeight) {
+              height = canvas!.parentElement!.clientHeight - 10;
+              width = height * ratio;
+            }
+
+            canvas.width = canvas!.parentElement!.clientWidth;
+
+            canvas.height = canvas!.parentElement!.clientHeight;
+
+            ctx.drawImage(
+              img,
+              0,
+              0,
+              img.width,
+              img.height,
+              0,
+              0,
+              width,
+              height
+            );
+
             canvas.removeAttribute("data-caman-id");
           };
         },
         false
       );
     });
+
+    window.addEventListener("resize", () => {
+      if (canvas.width < menuDiv.offsetWidth) {
+        canvas.width = menuDiv.offsetWidth;
+      }
+
+      if (canvas.height < menuDiv.offsetHeight) {
+        canvas.height = menuDiv.offsetHeight;
+      }
+
+      ctx.drawImage(img,0,0,img.width,img.height,0,0, menuDiv.offsetWidth, menuDiv.offsetHeight)
+    });
   });
 
   return (
     <div className={styles.app}>
-      <Paper elevation={4} className={`${styles.menu} ${styles.box}`}>
-        <label className={`${styles.uploadlabel}`}>
-          <Button>
-            <input
-              type="file"
-              id="uploadfile"
-              className={`${styles.uploadbtn}`}
-            ></input>
-          </Button>
-        </label>
+      <label className={`${styles.uploadlabel}`}>
+        <Button>
+          <input
+            type="file"
+            id="uploadfile"
+            className={`${styles.uploadbtn}`}
+          ></input>
+        </Button>
+      </label>
 
+      <Paper elevation={4} id="menu" className={`${styles.menu} ${styles.box}`}>
         <canvas className={styles.canva} id="canvas"></canvas>
       </Paper>
 
